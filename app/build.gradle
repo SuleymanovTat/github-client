@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+def keyAliasProperty
+def keyPasswordProperty
+def storeFileProperty
+def storePasswordProperty
+
+def keystorePropertiesFile = rootProject.file('keystore.properties')
+if (keystorePropertiesFile.exists()) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('keystore.properties').newDataInputStream())
+    keyAliasProperty = properties.getProperty("keystore.alias")
+    keyPasswordProperty = properties.getProperty("keystore.alias.password")
+    storeFileProperty = file(properties.getProperty("keystore.path"))
+    storePasswordProperty = properties.getProperty("keystore.password")
+} else {
+    if (System.getenv("KEY_ALIAS") != null && System.getenv("KEY_PASSWORD") != null
+            && System.getenv("KEYSTORE") != null && System.getenv("KEYSTORE_PASSWORD") != null) {
+        keyAliasProperty = System.getenv("KEY_ALIAS")
+        keyPasswordProperty = System.getenv("KEY_PASSWORD")
+        storeFileProperty = file(System.getenv("KEYSTORE"))
+        storePasswordProperty = System.getenv("KEYSTORE_PASSWORD")
+    }
+}
+
+android {
+    signingConfigs {
+        release {
+            keyAlias keyAliasProperty
+            keyPassword keyPasswordProperty
+            storeFile storeFileProperty
+            storePassword storePasswordProperty
+        }
+        debug {
+            keyAlias keyAliasProperty
+            keyPassword keyPasswordProperty
+            storeFile storeFileProperty
+            storePassword storePasswordProperty
+        }
+    }
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "ru.suleymanovtat.githubclient"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        project.ext.set("archivesBaseName", "github_client-" + defaultConfig.versionName)
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", '"https://api.github.com/"'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", '"https://api.github.com/"'
+        }
+    }
+}
+
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-crash:16.0.1'
+//    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:2.0.0'
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+}
+
+apply plugin: 'com.google.gms.google-services'
