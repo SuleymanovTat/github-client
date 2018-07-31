@@ -22,14 +22,6 @@ class RepoListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mAdapter: RepoListAdapter
     private val disposable = CompositeDisposable()
     private var items: List<Item> = arrayListOf()
-    private val mOnClickListener = ClickListener { position ->
-        val item = items[position]
-        activity!!.supportFragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .replace(R.id.fl_container,
-                        DetailsFragment().newInstance(item), DetailsFragment::class.toString()).addToBackStack(null).commit()
-    }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -91,6 +83,14 @@ class RepoListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             disposable.clear()
         }
         super.onPause()
+    }
+
+    private val mOnClickListener = ClickListener { position ->
+        val item = items[position]
+        activity!!.supportFragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                .replace(R.id.fl_container,
+                        DetailsFragment().newInstance(item), DetailsFragment::class.toString()).addToBackStack(null).commit()
     }
 }
 
