@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="124dp"
+        android:layout_height="124dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/app_name"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@+id/avatar"
+        android:maxLines="1"
+        android:text="@string/user_login" />
+
+    <TextView
+        android:id="@+id/tvUserLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLogin"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/avatar"
+        android:maxLines="1"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        tools:text="name" />
+
+    <TextView
+        android:id="@+id/tvHtmlUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUserLogin"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@+id/avatar"
+        android:text="@string/github_url" />
+
+    <TextView
+        android:id="@+id/tvUserHtmlUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvHtmlUrl"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/avatar"
+        android:autoLink="web"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorAccent"
+        tools:text="htmlUrl" />
+
+</RelativeLayout>
