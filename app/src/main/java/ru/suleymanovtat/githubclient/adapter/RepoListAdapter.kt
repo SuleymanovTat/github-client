@@ -3,18 +3,15 @@ package ru.suleymanovtat.githubclient.adapter
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import ru.suleymanovtat.githubclient.R
+import ru.suleymanovtat.githubclient.ItemViewModel
+import ru.suleymanovtat.githubclient.databinding.ItemBinding
 import ru.suleymanovtat.githubclient.model.data.Item
 
-class RepoListAdapter(private val listener: ClickListener) : RecyclerView.Adapter<RepoListAdapter.ViewHolder>() {
+class RepoListAdapter(clickListener: ClickListener) : RecyclerView.Adapter<RepoListAdapter.ViewHolder>() {
 
     private var repoList: List<Item>? = arrayListOf()
+    private var mClickListener = clickListener
 
     fun setRepoList(repoList: List<Item>) {
         this.repoList = repoList
@@ -22,33 +19,32 @@ class RepoListAdapter(private val listener: ClickListener) : RecyclerView.Adapte
     }
 
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
-        val v = LayoutInflater.from(viewGroup.context).inflate(R.layout.repo_layout, viewGroup, false)
-        return ViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, i: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.getContext())
+        val binding = ItemBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
 
     override fun onBindViewHolder(viewHolder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val item = repoList!![position]
-        viewHolder.name.text = item.login
-        Glide.with(viewHolder.avatar.context)
-                .load(item.avatar_url).apply(RequestOptions.circleCropTransform().error(R.drawable.ic_error))
-                .into(viewHolder.avatar)
-        viewHolder.itemView.setOnClickListener { listener.onItemClick(position) }
+        viewHolder.bind(item, mClickListener)
     }
 
     override fun getItemCount(): Int {
         return if (repoList == null) 0 else repoList!!.size
     }
 
-    public class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    public class ViewHolder(binding: ItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val name: TextView
-        val avatar: ImageView
+        var mBinding: ItemBinding = binding
 
-        init {
-            name = itemView.findViewById(R.id.tv_name)
-            avatar = itemView.findViewById(R.id.avatar)
+        fun bind(item: Item, mClickListener: ClickListener) {
+            mBinding.item = ItemViewModel(item)
+            mBinding.root.setOnClickListener({
+                mClickListener.onItemClick(item)
+            })
+            mBinding.executePendingBindings()
         }
     }
 }

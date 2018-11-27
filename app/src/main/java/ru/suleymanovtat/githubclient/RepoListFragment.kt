@@ -17,7 +17,8 @@ import ru.suleymanovtat.githubclient.model.api.ApiModule
 import ru.suleymanovtat.githubclient.model.data.Item
 import ru.suleymanovtat.githubclient.model.data.ItemResponse
 
-class RepoListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class RepoListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, ClickListener {
+
 
     private lateinit var mAdapter: RepoListAdapter
     private val disposable = CompositeDisposable()
@@ -30,7 +31,7 @@ class RepoListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAdapter = RepoListAdapter(mOnClickListener)
+        mAdapter = RepoListAdapter(this)
         recyclerList.adapter = mAdapter
         refresher.setOnRefreshListener(this)
         if (items.isEmpty()) {
@@ -85,12 +86,11 @@ class RepoListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onPause()
     }
 
-    private val mOnClickListener = ClickListener { position ->
-        val item = items[position]
+    override fun onItemClick(item: Item?) {
         activity!!.supportFragmentManager.beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .replace(R.id.fl_container,
-                        DetailsFragment().newInstance(item), DetailsFragment::class.toString()).addToBackStack(null).commit()
+                        DetailsFragment().newInstance(item!!), DetailsFragment::class.toString()).addToBackStack(null).commit()
     }
 }
 

@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Github клиент</string>
+    <string name="app_name">Список пользователей</string>
     <string name="something_went_wrong_try_again">Что-то пошло не так.\nПопробуй еще раз.</string>
     <string name="check_network">Проверти подключению к сети</string>
     <string name="user_login">Логин пользователя</string>
-    <string name="github_url">Github URL</string>
+    <string name="github_url">URL</string>
 
 </resources>
