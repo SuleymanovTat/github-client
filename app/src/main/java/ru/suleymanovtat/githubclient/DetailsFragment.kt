@@ -1,5 +1,6 @@
 package ru.suleymanovtat.githubclient
 
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.fragment_details.*
+import ru.suleymanovtat.githubclient.databinding.ItemDetailsBinding
 import ru.suleymanovtat.githubclient.model.data.Item
 
 class DetailsFragment : Fragment() {
@@ -25,18 +27,12 @@ class DetailsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_details, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val binding: ItemDetailsBinding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_details, container, false)
+        val view: View = binding.root
         val item = arguments!!.getParcelable<Item>(KEY_ITEM)
-        tvUserLogin.setText(item.login)
-        tvUserHtmlUrl.setText(item.html_url)
-        Glide.with(this.activity!!)
-                .load(item.avatar_url).apply(RequestOptions.circleCropTransform().error(R.drawable.ic_error))
-                .into(avatar)
-
+        binding.item = ItemViewModel(item)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

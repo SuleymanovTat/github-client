@@ -6,9 +6,11 @@ class ItemViewModel {
 
     public var name: String? = null
     public var avatar: String? = null
+    public var url: String? = null
 
     public constructor(item: Item) {
         name = item.login
         avatar = item.avatar_url
+        url = item.html_url
     }
 }
